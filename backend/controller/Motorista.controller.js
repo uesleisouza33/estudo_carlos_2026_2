@@ -94,15 +94,75 @@ const consultar = async (req, res) => {
     }
 }
 
-const atualizar = async (req, res) =>{
+const atualizar = async (req, res) => {
     const id = req.params.id
     const valores = req.body
 
     try {
-        
+        const motorista = await Motorista.findByPk(id)
+        if (!motorista) { return res.status(404).json({ message: 'Motorista não encontrado' }) }
+
+        const dadosAtualizados = { ...valores }
+
+        if (valores.cpf) {
+            if (valores.cpf.length !== 11) {
+                return res.status(400).json({ message: 'O CPF deve conter exatamente 11 dígitos!' })
+            }
+            dadosAtualizados.cpf = CryptoJS.AES.encrypt(valores.cpf, CHAVE_SECRETA).toString()
+        }
+
+        await Motorista.update(dadosAtualizados, { where: { codMotorista: id } })
+        return res.status(200).json({ message: 'Motorista atualizado com sucesso' })
     } catch (error) {
         console.error('Erro ao atualizar motorista', error)
+        return res.status(500).json({ message: 'Erro ao atualizar ciclista' })
     }
 }
 
-module.exports = {cadastrar, listar, consultar}
+
+const apagar = async (req, res) => {
+    const id = req.params.id
+    try {
+        const motorista = Motorista.findByPk(id)
+        if (!motorista) { return res.status(404).json({ message: "Motorista não encontrado" }) }
+
+        await Motorista.destroy({ where: { codMotorista: id } })
+        return res.status(200).json({ message: 'Ciclista exclúido com sucesso' })
+    } catch (error) {
+        console.error('Erro ao apgar motorista: ', error)
+        return res.status(500).json({ message: 'Erro ao apagar motorista' })
+    }
+}
+
+const consultarNome = async (req, res) => {
+    const nome = req.params.nome
+
+    try {
+        const motorista = await Motorista.findOne({ where: { nome: nome } })
+
+        if (!motorista) {
+            return res.status(404).json({ message: 'Nenhum motorista encontrado' })
+        }
+
+        const cpfDescripto = ''
+        const cnhDescripto = ''
+
+        const bytesCpf = CryptoJS.AES.decrypt(el.cpf, CHAVE_SECRETA)
+        cpfDescripto = bytesCpf.toString(CryptoJS.enc.Utf8)
+        const bytesCnh = CryptoJS.AES.decrypt(el.cnh, CHAVE_SECRETA)
+        cnhDescripto = bytesCnh.toString(CryptoJS.enc.Utf8)
+
+        return res.status(200).json({
+            codMotorista: motorista.codMotorista,
+            nome: motorista.nome,
+            cnh: cnhDescripto,
+            cpf: cpfDescripto,
+            telefone: motorista.telefone
+
+        })
+    } catch (error) {
+        console.error('Erro ao consultar por nome: ', error)
+        return res.status(500).json({ message: 'Erro ao consultar por nome: ', error })
+    }
+}
+module.exports = { cadastrar, listar, consultar, atualizar, apagar, consultarNome}
