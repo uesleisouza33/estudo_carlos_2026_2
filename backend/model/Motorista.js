@@ -1,0 +1,33 @@
+const { DataTypes } = require('sequelize')
+const sequelize = require('../db/db')
+
+const Motorista = sequelize.define('motorista', {
+    codMotorista: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    nome: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    cnh: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    cpf: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    telefone: {
+        type: DataTypes.STRING,
+        allowNull: false
+    }
+}, {
+    tableName: 'motoristas',
+    timestamps: false
+})
+
+
+
+module.exports = Motorista
