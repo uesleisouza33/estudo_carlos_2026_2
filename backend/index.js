@@ -1,8 +1,9 @@
-const express = require('express');
+﻿const express = require('express');
 const cors = require('cors');
 const sequelize = require('./db/db');
 require('./model/rel');
 
+const authMiddleware = require('./middleware/auth.middleware');
 const AuthController = require('./controller/auth.controller');
 const CargaController = require('./controller/Carga.controller');
 const EntregaController = require('./controller/Entrega.controller');
@@ -23,8 +24,10 @@ app.get('/', (req, res) => {
 });
 
 app.post('/login', AuthController.login);
-
 app.post('/funcionario', FuncionarioController.cadastrar);
+
+app.use(authMiddleware);
+
 app.post('/carga', CargaController.cadastrar);
 app.post('/entrega', EntregaController.cadastrar);
 app.post('/motorista', MotoristaController.cadastrar);
