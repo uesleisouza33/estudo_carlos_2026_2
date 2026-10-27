@@ -11,12 +11,16 @@
     <header>
         <nav>
             <a href="./index.html">Home</a>&emsp;
-            <a href="./html/login.html" id="login">Login</a>&emsp;
+            <a href="./html/login.html">Login</a>&emsp;
             <a href="./html/funcionario_cadastrar.html">Cadastrar Funcionário</a>&emsp;
             <a href="./html/motorista_cadastrar.html">Cadastrar Motorista</a>&emsp;
+            <a href="./html/motorista_listar.html">Listar Motoristas</a>&emsp;
+            <a href="./html/motorista_consultar_id.html">Consultar Motorista por ID</a>&emsp;
+            <a href="./html/motorista_consultar_nome.html">Consultar Motorista por Nome</a>&emsp;
+            <a href="./html/motorista_atualizar.html">Atualizar Motorista</a>&emsp;
+            <a href="./html/motorista_apagar.html">Apagar Motorista</a>&emsp;
             <a href="./html/carga_cadastrar.html">Cadastrar Carga</a>&emsp;
-            <a href="./html/entrega_cadastrar.html">Cadastrar Entrega</a>&emsp;
-            <a href="./html/motorista_listar.html">Listar Motoristas</a>
+            <a href="./html/entrega_cadastrar.html">Cadastrar Entrega</a>
             <span id="verificar_log" class="menu_direita"></span>
         </nav>
         <br><hr><br>
@@ -25,13 +29,5 @@
         <h1>Logística Express</h1>
         <h2>Controle de cargas, motoristas e entregas</h2>
     </main>
-
-    <script>
-        const login = document.getElementById('login')
-        login.style.display = 'inline'
-        if (localStorage.getItem('token')) {
-            login.style.display = 'none'
-        }
-    </script>
 </body>
 </html>
