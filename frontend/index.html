@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/style.css">
+    <script src="./js/index.js" defer></script>
+    <title>Logística Express</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="./index.html">Home</a>&emsp;
+            <a href="./html/login.html" id="login">Login</a>&emsp;
+            <a href="./html/funcionario_cadastrar.html">Cadastrar Funcionário</a>&emsp;
+            <a href="./html/motorista_cadastrar.html">Cadastrar Motorista</a>&emsp;
+            <a href="./html/carga_cadastrar.html">Cadastrar Carga</a>&emsp;
+            <a href="./html/entrega_cadastrar.html">Cadastrar Entrega</a>&emsp;
+            <a href="./html/motorista_listar.html">Listar Motoristas</a>
+            <span id="verificar_log" class="menu_direita"></span>
+        </nav>
+        <br><hr><br>
+    </header>
+    <main>
+        <h1>Logística Express</h1>
+        <h2>Controle de cargas, motoristas e entregas</h2>
+    </main>
+
+    <script>
+        const login = document.getElementById('login')
+        login.style.display = 'inline'
+        if (localStorage.getItem('token')) {
+            login.style.display = 'none'
+        }
+    </script>
+</body>
+</html>
