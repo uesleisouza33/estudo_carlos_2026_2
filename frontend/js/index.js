@@ -12,5 +12,5 @@ if (token) {
         location.reload();
     });
 } else {
-    verificar_log.innerHTML = `<a href="./html/login.html">Login</a>`;
+    // verificar_log.innerHTML = `<a href="./html/login.html">Login</a>`;
 }
