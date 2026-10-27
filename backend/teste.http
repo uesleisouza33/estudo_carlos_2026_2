@@ -1,0 +1,75 @@
+### Cadastrar Funcionário
+POST http://localhost:3000/funcionario
+Content-Type: application/json
+
+{
+  "nome": "João Silva",
+  "email": "joao@logistica.com",
+  "senha": "123456"
+}
+
+
+### Login
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+  "email": "joao@logistica.com",
+  "senha": "123456"
+}
+
+### Cadastrar Motorista
+POST http://localhost:3000/motorista
+Content-Type: application/json
+
+{
+  "nome": "Carlos Souza",
+  "cnh": "12345678901",
+  "cpf": "12345678901",
+  "telefone": "47999999999"
+}
+
+### Listar Motoristas
+GET http://localhost:3000/motorista
+
+### Consultar Motorista por ID
+GET http://localhost:3000/motorista/1
+
+### Consultar Motorista por Nome
+GET http://localhost:3000/motorista/nome/Carlos Souza
+
+### Atualizar Motorista
+PUT http://localhost:3000/motorista/1
+Content-Type: application/json
+
+{
+  "telefone": "47988888888"
+}
+
+### Deletar Motorista
+DELETE http://localhost:3000/motorista/1
+
+### Cadastrar Carga
+POST http://localhost:3000/carga
+Content-Type: application/json
+
+{
+  "descricao": "Carga de eletrodomésticos",
+  "peso": 250.50,
+  "volume": 18.75,
+  "codigoRastreio": "ABC123456",
+  "codMotorista": 1
+}
+
+### Cadastrar Entrega
+POST http://localhost:3000/entrega
+Content-Type: application/json
+
+{
+  "codEntrega": 1,
+  "destino": "Florianópolis",
+  "status": "TRANSITO",
+  "data": "2026-10-27",
+  "hora": "08:30:00",
+  "codCarga": 1
+}

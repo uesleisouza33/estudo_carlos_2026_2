@@ -1,4 +1,4 @@
-const Funcionario = require('../model/Funcionario')
+﻿const Funcionario = require('../model/Funcionario')
 const CryptoJS = require('crypto-js')
 const CHAVE_SECRETA = 'abu'
 
@@ -10,7 +10,7 @@ const cadastrar = async (req, res) => {
             return res.status(400).json({ message: 'Preencha todos campos corretamente' })
         }
 
-        const senhaCripto = CryptoJS.AES.encrypt(valores.senha, CHAVE_SECRETA)
+        const senhaCripto = CryptoJS.AES.encrypt(valores.senha, CHAVE_SECRETA).toString()
 
         const valores2 = {
             nome: valores.nome,
@@ -27,4 +27,4 @@ const cadastrar = async (req, res) => {
     }
 }
 
-module.exports = { cadastrar }  
+module.exports = { cadastrar }

@@ -1,4 +1,4 @@
-const Motorista = require('../model/Motorista')
+﻿const Motorista = require('../model/Motorista')
 const CryptoJS = require('crypto-js')
 const CHAVE_SECRETA = 'abu'
 
@@ -6,12 +6,12 @@ const cadastrar = async (req, res) => {
     try {
         const valores = req.body
 
-        if (!valores.nome || !valores.cnh, !valores.cpf || !valores.telefone) {
-            res.status(400).json({ message: 'Preencha os campos corretamente' })
+        if (!valores.nome || !valores.cnh || !valores.cpf || !valores.telefone) {
+            return res.status(400).json({ message: 'Preencha os campos corretamente' })
         }
 
-        const cnhCripto = CryptoJS.AES.encrypt(valores.cnh, CHAVE_SECRETA)
-        const cpfCripto = CryptoJS.AES.encrypt(valores.cpf, CHAVE_SECRETA)
+        const cnhCripto = CryptoJS.AES.encrypt(valores.cnh, CHAVE_SECRETA).toString()
+        const cpfCripto = CryptoJS.AES.encrypt(valores.cpf, CHAVE_SECRETA).toString()
 
         const valores2 = {
             nome: valores.nome,
@@ -67,17 +67,12 @@ const consultar = async (req, res) => {
     const id = req.params.id
     try {
         const motorista = await Motorista.findByPk(id)
-        if (!ciclista) {
+        if (!motorista) {
             return res.status(400).json({ message: 'Motorista não encontrado' })
         }
 
-        const cpfDescripto = ''
-        const cnhDescripto = ''
-
-        const bytesCpf = CryptoJS.AES.decrypt(el.cpf, CHAVE_SECRETA)
-        cpfDescripto = bytesCpf.toString(CryptoJS.enc.Utf8)
-        const bytesCnh = CryptoJS.AES.decrypt(el.cnh, CHAVE_SECRETA)
-        cnhDescripto = bytesCnh.toString(CryptoJS.enc.Utf8)
+        const cpfDescripto = CryptoJS.AES.decrypt(motorista.cpf, CHAVE_SECRETA).toString(CryptoJS.enc.Utf8)
+        const cnhDescripto = CryptoJS.AES.decrypt(motorista.cnh, CHAVE_SECRETA).toString(CryptoJS.enc.Utf8)
 
         return res.status(200).json({
             codMotorista: motorista.codMotorista,
@@ -85,7 +80,6 @@ const consultar = async (req, res) => {
             cnh: cnhDescripto,
             cpf: cpfDescripto,
             telefone: motorista.telefone
-
         })
 
     } catch (error) {
@@ -111,25 +105,28 @@ const atualizar = async (req, res) => {
             dadosAtualizados.cpf = CryptoJS.AES.encrypt(valores.cpf, CHAVE_SECRETA).toString()
         }
 
+        if (valores.cnh) {
+            dadosAtualizados.cnh = CryptoJS.AES.encrypt(valores.cnh, CHAVE_SECRETA).toString()
+        }
+
         await Motorista.update(dadosAtualizados, { where: { codMotorista: id } })
         return res.status(200).json({ message: 'Motorista atualizado com sucesso' })
     } catch (error) {
         console.error('Erro ao atualizar motorista', error)
-        return res.status(500).json({ message: 'Erro ao atualizar ciclista' })
+        return res.status(500).json({ message: 'Erro ao atualizar motorista' })
     }
 }
-
 
 const apagar = async (req, res) => {
     const id = req.params.id
     try {
-        const motorista = Motorista.findByPk(id)
-        if (!motorista) { return res.status(404).json({ message: "Motorista não encontrado" }) }
+        const motorista = await Motorista.findByPk(id)
+        if (!motorista) { return res.status(404).json({ message: 'Motorista não encontrado' }) }
 
         await Motorista.destroy({ where: { codMotorista: id } })
-        return res.status(200).json({ message: 'Ciclista exclúido com sucesso' })
+        return res.status(200).json({ message: 'Motorista excluído com sucesso' })
     } catch (error) {
-        console.error('Erro ao apgar motorista: ', error)
+        console.error('Erro ao apagar motorista: ', error)
         return res.status(500).json({ message: 'Erro ao apagar motorista' })
     }
 }
@@ -144,13 +141,8 @@ const consultarNome = async (req, res) => {
             return res.status(404).json({ message: 'Nenhum motorista encontrado' })
         }
 
-        const cpfDescripto = ''
-        const cnhDescripto = ''
-
-        const bytesCpf = CryptoJS.AES.decrypt(el.cpf, CHAVE_SECRETA)
-        cpfDescripto = bytesCpf.toString(CryptoJS.enc.Utf8)
-        const bytesCnh = CryptoJS.AES.decrypt(el.cnh, CHAVE_SECRETA)
-        cnhDescripto = bytesCnh.toString(CryptoJS.enc.Utf8)
+        const cpfDescripto = CryptoJS.AES.decrypt(motorista.cpf, CHAVE_SECRETA).toString(CryptoJS.enc.Utf8)
+        const cnhDescripto = CryptoJS.AES.decrypt(motorista.cnh, CHAVE_SECRETA).toString(CryptoJS.enc.Utf8)
 
         return res.status(200).json({
             codMotorista: motorista.codMotorista,
@@ -158,11 +150,11 @@ const consultarNome = async (req, res) => {
             cnh: cnhDescripto,
             cpf: cpfDescripto,
             telefone: motorista.telefone
-
         })
     } catch (error) {
         console.error('Erro ao consultar por nome: ', error)
-        return res.status(500).json({ message: 'Erro ao consultar por nome: ', error })
+        return res.status(500).json({ message: 'Erro ao consultar por nome' })
     }
 }
-module.exports = { cadastrar, listar, consultar, atualizar, apagar, consultarNome}
+
+module.exports = { cadastrar, listar, consultar, atualizar, apagar, consultarNome }
